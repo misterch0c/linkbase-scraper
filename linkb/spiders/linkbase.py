@@ -15,9 +15,24 @@ class LinkbaseSpider(Spider):
 	) 
 	# scraper = cfscrape.create_scraper() # returns a requests.Session object
 	# body = scraper.get(start_urls[0]).content # => "<!DOCTYPE html><html><head>..."
-
 	def parse(self, response):
 		arr = response.xpath('//table[2]//td//text()').extract()
+		arr2 = response.xpath('//table[2]//td//@href').extract()
+
+		for link in arr2:
+			if '#' in link:
+				arr2.remove(link)		
+		for link in arr2:
+			if 'report_link' in link:
+				arr2.remove(link)		
+		for link in arr2:
+			if 'vanille' in link:
+				arr2.remove(link)		
+		for link in arr2:
+			if 'bit.ly' in link:
+				arr2.remove(link)
+
+
 
 		langues =['German','Albanian','Arabic','Azerbaijan','Bosnian','Chinese',
 		'Croatia','Czech','English','French','Georgian','Indonesia','Italian',
@@ -30,7 +45,7 @@ class LinkbaseSpider(Spider):
 		done=[]
 		tmpkey=""
 		rez2={}
-
+		i=-1
 
 		for el in arr:
 			print(el.strip())
@@ -45,12 +60,14 @@ class LinkbaseSpider(Spider):
 				print('secondif')
 				rez2['lang']=done[len(done)-1]
 				rez2['name']=val
-				rez2['url']="no"
+				i=i+1
+				rez2['url']=arr2[i]
 				rez.append(rez2)
 				rez2={}
 			
 
 		pass
+		#print(arr2[])
 
 		with open("result.json", "a") as outfile:
 			outfile.write(json.dumps(rez,ensure_ascii=False,indent=4,sort_keys=True).encode('utf-8'))
