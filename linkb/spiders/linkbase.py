@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-
 import scrapy
 import cfscrape
 from scrapy.spiders import Spider
+import json
 
-rez={}
+rez=[]
 
 class LinkbaseSpider(Spider):
 
@@ -18,10 +18,18 @@ class LinkbaseSpider(Spider):
 
 	def parse(self, response):
 		arr = response.xpath('//table[2]//td//text()').extract()
-		langues =['German','Albanian','Chinese']
+
+		langues =['German','Albanian','Arabic','Azerbaijan','Bosnian','Chinese',
+		'Croatia','Czech','English','French','Georgian','Indonesia','Italian',
+		'Malaysian','Netherlands','Persian','Polish','Portugese','Romanian',
+		'Russian','Serbian','Spanish','Thai','Turkish','Ukrainian','Vietnamese']
+
+
 		nothx = ['Partners']
-		values=[]
-		
+		values={}
+		done=[]
+		tmpkey=""
+		rez2={}
 
 
 		for el in arr:
@@ -30,19 +38,21 @@ class LinkbaseSpider(Spider):
 
 			if(val in langues):
 				print('val in langues')
-				key=val
-				
-				rez[key]=values
+				#key=val
+				done.append(val)
 
 			if(val and val not in nothx and val not in langues):
 				print('secondif')
-				values.append(val)
-				#rez[key]=val;
+				rez2['lang']=done[len(done)-1]
+				rez2['name']=val
+				rez2['url']="no"
+				rez.append(rez2)
+				rez2={}
 			
-
-		print("0000000000000000000000000000")
 
 		pass
 
-		print(rez)
-	
+		with open("result.json", "a") as outfile:
+			outfile.write(json.dumps(rez,ensure_ascii=False,indent=4,sort_keys=True).encode('utf-8'))
+
+		print('DONE')
