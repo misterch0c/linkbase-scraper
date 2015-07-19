@@ -1,0 +1,14 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>404 Not Found</title>
+<script type="text/javascript">
+//<![CDATA[
+try{if (!window.CloudFlare) {var CloudFlare=[{verbose:0,p:0,byc:0,owlid:"cf",bag2:1,mirage2:0,oracle:0,paths:{cloudflare:"/cdn-cgi/nexp/dok3v=1613a3a185/"},atok:"4a3b86750861f0f793800514dd88c89e",petok:"209f108bc2271e9c2471392ea61b265863942a78-1437302883-1800",betok:"9ce5a771922ef84119460a76c8aa912d9c7cd3b5-1437302883-120",zone:"link-base.org",rocket:"a",apps:0}];document.write('<script type="text/javascript" src="//ajax.cloudflare.com/cdn-cgi/nexp/dok3v=7e13c32551/cloudflare.min.js"><'+'\/script>');}}catch(e){};
+//]]>
+</script>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL /images/pix.JPG was not found on this server.</p>
+<p>Additionally, a 404 Not Found
+error was encountered while trying to use an ErrorDocument to handle the request.</p>
+</body></html>
