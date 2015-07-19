@@ -9,6 +9,5 @@ import scrapy
 
 
 class LinkbItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
+	name = scrapy.Field()    # name = scrapy.Field()
     pass

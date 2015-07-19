@@ -1,15 +1,20 @@
 # -*- coding: utf-8 -*-
 import scrapy
+import logging
+
 import cfscrape
 from scrapy.spiders import Spider
 import json
+from scrapy import log,signals, Field
+from scrapy.item import Item
+
 
 rez=[]
 
 class LinkbaseSpider(Spider):
 
 	name = "linkbase"
-	allowed_domains = ["127.0.0.1"]
+	#allowed_domains = ['127.0.0.1'] #commented = * 
 	start_urls = (
 		'file://127.0.0.1/home/unkn0wn/web/linkbase/linkb/link.html',
 	) 
@@ -19,9 +24,14 @@ class LinkbaseSpider(Spider):
 		arr = response.xpath('//table[2]//td//text()').extract()
 		arr2 = response.xpath('//table[2]//td//@href').extract()
 
+
+	#dirty but It doesn't work when I check for multiple string at once..?
 		for link in arr2:
 			if '#' in link:
-				arr2.remove(link)		
+				arr2.remove(link)
+		for link in arr2:
+			if 'nachricht.co' in link:
+				arr2.remove(link)	
 		for link in arr2:
 			if 'report_link' in link:
 				arr2.remove(link)		
@@ -30,17 +40,17 @@ class LinkbaseSpider(Spider):
 				arr2.remove(link)		
 		for link in arr2:
 			if 'bit.ly' in link:
-				arr2.remove(link)
+				arr2.remove(link)		
+
 
 
 
 		langues =['German','Albanian','Arabic','Azerbaijan','Bosnian','Chinese',
-		'Croatia','Czech','English','French','Georgian','Indonesia','Italian',
-		'Malaysian','Netherlands','Persian','Polish','Portugese','Romanian',
+		'Croatia','Czech','English','French','Indonesia','Italian',
+		'Malaysian','Netherlands','Persian','Polish','Portuguese','Romanian',
 		'Russian','Serbian','Spanish','Thai','Turkish','Ukrainian','Vietnamese']
 
-
-		nothx = ['Partners']
+		nothx = ['Partners','Georgian']
 		values={}
 		done=[]
 		tmpkey=""
@@ -50,7 +60,6 @@ class LinkbaseSpider(Spider):
 		for el in arr:
 			print(el.strip())
 			val=el.strip()
-
 			if(val in langues):
 				print('val in langues')
 				#key=val
@@ -61,15 +70,25 @@ class LinkbaseSpider(Spider):
 				rez2['lang']=done[len(done)-1]
 				rez2['name']=val
 				i=i+1
-				rez2['url']=arr2[i]
+				url=arr2[i]
+				rez2['linkbase_url']=url
 				rez.append(rez2)
 				rez2={}
-			
 
-		pass
-		#print(arr2[])
+		#request= scrapy.Request(url,callback=self.parse2)
+		#request.meta['item'] = item
+		#return request
+
 
 		with open("result.json", "a") as outfile:
 			outfile.write(json.dumps(rez,ensure_ascii=False,indent=4,sort_keys=True).encode('utf-8'))
 
 		print('DONE')
+
+	def parse2(self,response):
+
+		logging.info('222222222222222222222')
+		print("got reponse bra")
+		print(response.body)
+		request['tr'] = item
+		return item
