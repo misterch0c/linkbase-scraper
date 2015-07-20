@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
+
 import scrapy
 import logging
-
 import cfscrape
 from scrapy.spiders import Spider
 import json
 from scrapy import log,signals, Field
 from scrapy.item import Item
+from scrapy.http import Request
+
 
 
 rez=[]
+
 
 class LinkbaseSpider(Spider):
 
@@ -57,6 +60,7 @@ class LinkbaseSpider(Spider):
 		rez2={}
 		i=-1
 
+
 		for el in arr:
 			print(el.strip())
 			val=el.strip()
@@ -64,31 +68,47 @@ class LinkbaseSpider(Spider):
 				print('val in langues')
 				#key=val
 				done.append(val)
-
+			# if i>2:
+			# 	break
 			if(val and val not in nothx and val not in langues):
 				print('secondif')
-				rez2['lang']=done[len(done)-1]
-				rez2['name']=val
 				i=i+1
 				url=arr2[i]
+				scraper = cfscrape.create_scraper() # returns a requests.Session object
+				body = scraper.get(url).content # => "<!DOCTYPE html><html><head>..."
+				single_resp=response.replace(body=body)
+
+
+				
+
+
+				tmpurl=single_resp.xpath('//iframe/@src').extract()
+				rez2['url']=tmpurl
+				rez2['lang']=done[len(done)-1]
+				rez2['name']=val
+				
+				
+				print('ASSIGNING')
+				print(tmpurl)
+				print('TOOOO')
+				print(val)
+
 				rez2['linkbase_url']=url
 				rez.append(rez2)
 				rez2={}
 
-		#request= scrapy.Request(url,callback=self.parse2)
+
+
+				print("UUUUU")
+
+
+
+				#yield Request(url,callback=self.parse2)
 		#request.meta['item'] = item
-		#return request
+				#return request
 
 
 		with open("result.json", "a") as outfile:
 			outfile.write(json.dumps(rez,ensure_ascii=False,indent=4,sort_keys=True).encode('utf-8'))
 
 		print('DONE')
-
-	def parse2(self,response):
-
-		logging.info('222222222222222222222')
-		print("got reponse bra")
-		print(response.body)
-		request['tr'] = item
-		return item
